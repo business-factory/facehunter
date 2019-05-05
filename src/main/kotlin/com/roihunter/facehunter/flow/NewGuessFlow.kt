@@ -1,4 +1,4 @@
-package main.kotlin.com.roihunter.facehunter.flow
+package com.roihunter.facehunter.flow
 
 import org.springframework.stereotype.Service
 

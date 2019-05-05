@@ -1,4 +1,4 @@
-package main.kotlin.com.roihunter.facehunter
+package com.roihunter.facehunter
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
