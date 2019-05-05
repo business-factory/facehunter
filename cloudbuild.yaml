@@ -1,0 +1,87 @@
+steps:
+  # 1 get encrypted files from storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - cp
+      - gs://devops-build/*
+      - .
+
+  # 2 Set up git with key and domain.
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        mv id_rsa_github /root/.ssh/id_rsa
+        chmod 600 /root/.ssh/id_rsa
+        cat <<EOF >/root/.ssh/config
+        Hostname github.com
+        IdentityFile /root/.ssh/id_rsa
+        EOF
+        mv known_hosts /root/.ssh/known_hosts
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+
+  # 3 add the submodule
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - git submodule add -f git@github.com:business-factory/k8s_simple_deploy.git pipeline
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # 4 build the maven package (only necessary for java)
+  - name: 'eu.gcr.io/stage-193519/devops/maven-11-yq'
+    entrypoint: "bash"
+    args:
+      - -c
+      - |
+        if [ $(cat vars/group_vars/all.yaml | yq .java_build | grep -i true)  ]
+        then
+            mvn clean -Dmaven.test.skip=true package
+        fi
+
+  # 5 get the name of the application
+  - name: 'evns/yq'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - cat vars/group_vars/all.yaml | yq .name > name
+
+
+  # 5 build the docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: "bash"
+    args:
+      - -c
+      - name=`cat name` docker build -t eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest .
+
+  # 6 push the docker image to the registry
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: "bash"
+    args:
+      - -c
+      - docker push eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest
+
+  # 7 remove old untagged images from registry
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: "bash"
+    args:
+      - -c
+      - gcloud container images list-tags eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'` --filter='-tags:*' --format='get(digest)' | xargs -I{} gcloud container images delete eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`@{}
+
+  # 8 deploy to kubernetes
+  - name: 'eu.gcr.io/$PROJECT_ID/devops/ansible'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - ansible_vault_password=`cat ansible_vault_password` ansible-playbook pipeline/play.yml -i vars
+    env:
+      - 'PROJECT_ID=$PROJECT_ID'
+
+timeout: 1200s
+
