@@ -1,3 +1,4 @@
+# v1.0.0
 steps:
   # 1 get encrypted files from storage
   - name: 'gcr.io/cloud-builders/gsutil'
@@ -35,12 +36,12 @@ steps:
         path: /root/.ssh
 
   # 4 build the maven package (only necessary for java)
-  - name: 'eu.gcr.io/stage-193519/devops/maven-11-yq'
+  - name: 'eu.gcr.io/$PROJECT_ID/devops/maven-11-yq'
     entrypoint: "bash"
     args:
       - -c
       - |
-        if [ $(cat vars/group_vars/all.yaml | yq .java_build | grep -i true)  ]
+        if [ -f pom.xml ]
         then
             mvn clean -Dmaven.test.skip=true package
         fi
@@ -58,21 +59,33 @@ steps:
     entrypoint: "bash"
     args:
       - -c
-      - name=`cat name` docker build -t eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest .
+      - |
+        if [ -f Dockerfile ]
+        then
+            docker build -t eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest .
+        fi
 
   # 6 push the docker image to the registry
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: "bash"
     args:
       - -c
-      - docker push eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest
+      - |
+        if [ -f Dockerfile ]
+        then
+            docker push eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`:latest
+        fi
 
   # 7 remove old untagged images from registry
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: "bash"
     args:
       - -c
-      - gcloud container images list-tags eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'` --filter='-tags:*' --format='get(digest)' | xargs -I{} gcloud container images delete eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`@{}
+      - |
+        if [ -f Dockerfile ]
+        then
+            gcloud container images list-tags eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'` --filter='-tags:*' --format='get(digest)' | xargs -I{} gcloud container images delete eu.gcr.io/$PROJECT_ID/roihunter/`cat name | tr -d '"'`@{}
+        fi
 
   # 8 deploy to kubernetes
   - name: 'eu.gcr.io/$PROJECT_ID/devops/ansible'
