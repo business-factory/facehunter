@@ -1,8 +1,8 @@
 hostname: face.roihunter.com
 name: facehunter
 targetport: 8080
-imagePullSecrets: gcr-{{project}}-key
 cluster: secured_k8s_hetzner_cluster
 replicas: 1
-java_build: true
 namespace: internal
+envFrom: teams/internal/facehunter
+
