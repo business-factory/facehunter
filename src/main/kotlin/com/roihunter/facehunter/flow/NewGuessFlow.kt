@@ -42,17 +42,19 @@ class NewGuessFlow(
         blocks.add(ImageBlockDto(altText = "image to guess", imageUrl = correctGuess.profile.getImageUrl()!!)) // Image url has to be present - see filter above
         blocks.add(SectionBlockDto(content = "Guess who it is!"))
 
-        val buttons = mutableListOf(employeeToButton(correctGuess, "correct"))
-        buttons.addAll(wrongGuesses.map { employeeToButton(it, "wrong") })
+        val buttons = mutableListOf(employeeToButton(correctGuess, correctGuess, "correct"))
+        buttons.addAll(wrongGuesses.map { employeeToButton(it, correctGuess, "wrong") })
         blocks.add(ActionsBlockDto(elements = buttons))
 
         slackManager.postSlackMessage(userId, workspace.botToken, blocks)
     }
 
-    private fun employeeToButton(user: UserDto, correct: String = "wrong"): ButtonBlockDto {
+    private fun employeeToButton(user: UserDto, correctUser: UserDto, correct: String = "wrong"): ButtonBlockDto {
+        val buttonName = user.realName ?: user.profile.realName ?: user.name
+        val correctName = correctUser.realName ?: correctUser.profile.realName ?: correctUser.name
         return ButtonBlockDto(
-                text = user.realName ?: user.profile.realName ?: user.name,
-                value = "${user.id}_$correct"
+                text = buttonName,
+                value = "$correct..$correctName..${correctUser.profile.title}"
         )
     }
 }
