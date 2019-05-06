@@ -14,8 +14,6 @@ open class HibernateConfiguration {
 
     @Bean
     open fun dataSource(): DataSource {
-        println(dbUrl)
-        println(dbPassword)
         val dataSource: HikariDataSource = HikariDataSource()
         dataSource.driverClassName = "org.postgresql.Driver"
         dataSource.jdbcUrl = dbUrl

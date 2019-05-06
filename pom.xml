@@ -19,6 +19,13 @@
         <kotlin.version>1.2.71</kotlin.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,6 +58,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jkcclemens</groupId>
+            <artifactId>khttp</artifactId>
+            <version>-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
