@@ -13,4 +13,8 @@ data class UserProfileDto(
         val image512: String?,
         @JsonProperty("is_custom_image")
         val isCustomImage: Boolean
-)
+) {
+        fun getImageUrl(): String? {
+                return image512 ?: imageOriginal
+        }
+}

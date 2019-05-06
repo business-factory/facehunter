@@ -2,6 +2,7 @@ package com.roihunter.facehunter.manager
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.roihunter.facehunter.dto.slack.block.StructuredBlock
 import com.roihunter.facehunter.dto.slack.channel.OpenChannelDto
 import com.roihunter.facehunter.dto.slack.user.AllUsersDto
 import com.roihunter.facehunter.dto.slack.user.UserDto
@@ -14,15 +15,19 @@ class SlackManager(
         private val mapper: ObjectMapper
 ) {
 
-    fun postSlackMessage(userId: String, botToken: String) {
+    fun postSlackMessage(userId: String, botToken: String, blocks: List<StructuredBlock>? = null, text: String = "") {
         val channelId = getImChannelIdForUserId(userId, botToken)
-        val response = post(
+        val params = mutableMapOf(
+                "channel" to channelId,
+                "text" to text,
+                "token" to botToken
+        )
+        if (blocks != null) { // Some messages are simple - no need to include blocks in there.
+            params["blocks"] = mapper.writeValueAsString(blocks)
+        }
+        post(
                 url = "https://slack.com/api/chat.postMessage",
-                params = mapOf(
-                        "channel" to channelId,
-                        "text" to "Guess!",
-                        "token" to botToken
-                )
+                params = params
         )
     }
 
