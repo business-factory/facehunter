@@ -1,5 +1,6 @@
 package com.roihunter.facehunter.flow
 
+import com.roihunter.facehunter.dto.slack.block.ActionsBlockDto
 import com.roihunter.facehunter.dto.slack.block.ButtonBlockDto
 import com.roihunter.facehunter.dto.slack.block.DividerBlockDto
 import com.roihunter.facehunter.dto.slack.block.SectionBlockDto
@@ -25,7 +26,7 @@ class EvaluateGuessFlow(
         val blocks = mutableListOf<StructuredBlock>()
         blocks.add(SectionBlockDto(content = message))
         blocks.add(DividerBlockDto())
-        blocks.add(ButtonBlockDto(text = ":heavy_plus_sign: Guess another", value = "next"))
+        blocks.add(ActionsBlockDto(elements = listOf(ButtonBlockDto(text = ":heavy_plus_sign: Guess another", value = "next"))))
 
         slackManager.postSlackMessage(userId, workspace.botToken, blocks)
     }
