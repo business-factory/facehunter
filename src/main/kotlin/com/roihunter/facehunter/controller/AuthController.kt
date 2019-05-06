@@ -14,7 +14,7 @@ class AuthController(
 ) {
 
     @GetMapping(value = ["/oauth/redirect"])
-    fun oauthRedirect(@RequestParam code: String) {
-        exchangeVerificationCodeFlow.handleVerification(code)
+    fun oauthRedirect(@RequestParam code: String): String {
+        return exchangeVerificationCodeFlow.handleVerification(code)
     }
 }
