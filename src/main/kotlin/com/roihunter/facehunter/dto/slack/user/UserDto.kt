@@ -20,5 +20,5 @@ data class UserDto(
         @JsonProperty("is_app_user")
         val isAppUser: Boolean,
         @JsonProperty("profile")
-        val profile: UserProfileDto
+        val profile: UserProfileDto?
 )

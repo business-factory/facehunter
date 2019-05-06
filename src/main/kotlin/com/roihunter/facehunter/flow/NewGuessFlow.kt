@@ -26,8 +26,8 @@ class NewGuessFlow(
         val workspace = workspaceManager.getWorkspaceByTeamId(teamId)
         val employeeList = slackManager.getAllUsersInWorkspace(workspace.botToken)
         val guessableColleagues = employeeList.filter {
-            !it.deleted && !it.isAppUser && !it.isBot && !it.isRestricted && !it.isUltraRestricted && it.id != userId && it.profile.isCustomImage
-                    && it.profile.getImageUrl() != null
+            it.profile != null && !it.deleted && !it.isAppUser && !it.isBot && !it.isRestricted && !it.isUltraRestricted && it.id != userId
+                    && it.profile.isCustomImage && it.profile.getImageUrl() != null
         }.shuffled() // There is no smart randomness, i.e. the guesses can repeat.
         if (guessableColleagues.size < 6) {
             slackManager.postSlackMessage(
@@ -39,7 +39,7 @@ class NewGuessFlow(
         val wrongGuesses = guessableColleagues.drop(1).take(4)
 
         val blocks = mutableListOf<StructuredBlock>()
-        blocks.add(ImageBlockDto(altText = "image to guess", imageUrl = correctGuess.profile.getImageUrl()!!)) // Image url has to be present - see filter above
+        blocks.add(ImageBlockDto(altText = "image to guess", imageUrl = correctGuess.profile?.getImageUrl() ?: throw IllegalStateException("Missing image.")))
         blocks.add(SectionBlockDto(content = "Guess who it is!"))
 
         val buttons = mutableListOf(employeeToButton(correctGuess, correctGuess, "correct"))
@@ -50,11 +50,11 @@ class NewGuessFlow(
     }
 
     private fun employeeToButton(user: UserDto, correctUser: UserDto, correct: String = "wrong"): ButtonBlockDto {
-        val buttonName = user.realName ?: user.profile.realName ?: user.name
-        val correctName = correctUser.realName ?: correctUser.profile.realName ?: correctUser.name
+        val buttonName = user.realName ?: user.profile?.realName ?: user.name
+        val correctName = correctUser.realName ?: correctUser.profile?.realName ?: correctUser.name
         return ButtonBlockDto(
                 text = buttonName,
-                value = "$correct..$correctName..${correctUser.profile.title}"
+                value = "$correct..$correctName..${correctUser.profile?.title}"
         )
     }
 }
