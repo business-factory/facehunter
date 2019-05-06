@@ -20,4 +20,13 @@ class WorkspaceManager(
         workspaceRepository.save(workspace)
     }
 
+    fun getWorkspaceByTeamId(teamId: String): Workspace {
+        val workspaceOptional = workspaceRepository.getByTeamId(teamId)
+        if (workspaceOptional.isPresent) {
+            return workspaceOptional.get()
+        } else {
+            throw IllegalArgumentException("Workspace with given team id is not authenticated for Face Hunter: $teamId")
+        }
+    }
+
 }
