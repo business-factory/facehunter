@@ -1,6 +1,6 @@
 <h1>Face Hunter</h1>
 <h4>powered by <a href="https://www.roihunter.com/join-us">ROI Hunter</a></h4>
-This is an open-source Slack face guessing game. Let's be honest: it was written solely for the purpose of improving ROI Hunter brand awareness. It is based on a previous game that was developed by our Internal team in their spare time, but then got pretty popular.
+This is an open-source Slack face guessing game. It is based on a previous game that was developed by our Internal team in our spare time, but then got pretty popular. We have a few company values, among which are <i>joy</i> and <i>openess</i>, so it feels quite natural to release the app as open-source, so that everyone can have fun.
 
 <h3>Installation</h3>
 Simply install the app from Slack app directory.
@@ -25,3 +25,6 @@ Only people who have uploaded their profile image can be shown. You wouldn't be 
 
 <h6>Single workspace</h6>
 The app is limited to only one Slack workspace. While we are aware there are some (particularly larger) companies that keep multiple Slack workspaces for different teams, Face Hunter (at least at this moment) doesn't support that.
+
+<h3>Contact us</h3>
+My contact mail is <a href="mailto:josef.hertl@roihunter.com">josef.hertl@roihunter.com</a>. Feel free to contact me with any issues, requests or suggestions. If you are interested in the company, you can check our <a href="https://www.roihunter.com/join-us">page</a></h4>.
