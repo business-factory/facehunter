@@ -6,14 +6,20 @@ import com.roihunter.facehunter.dto.slack.block.StructuredBlock
 import com.roihunter.facehunter.dto.slack.channel.OpenChannelDto
 import com.roihunter.facehunter.dto.slack.user.AllUsersDto
 import com.roihunter.facehunter.dto.slack.user.UserDto
+import com.roihunter.facehunter.exception.RequestNotVerifiedException
 import khttp.get
 import khttp.post
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 @Service
 class SlackManager(
         private val mapper: ObjectMapper
 ) {
+
+    private val signingSecret = System.getenv("SLACK_SIGNING_SECRET")
 
     fun postSlackMessage(userId: String, botToken: String, blocks: List<StructuredBlock>? = null, text: String = "") {
         val channelId = getImChannelIdForUserId(userId, botToken)
@@ -56,5 +62,23 @@ class SlackManager(
         )
         val imChannelDto: OpenChannelDto = mapper.readValue(imOpenResponse.text)
         return imChannelDto.channel.id
+    }
+
+    /**
+     * Verifies that given message really came from Slack. Doesn't check for timestamp age. Throws an exception if it the signature doesn't match.
+     */
+    fun verifyRequest(requestBody: String, timestamp: String, slackSignature: String) {
+        val algorithm = "HmacSHA256"
+        val hashKey = SecretKeySpec(signingSecret.toByteArray(), algorithm)
+        val mac: Mac = Mac.getInstance(algorithm)
+        mac.init(hashKey)
+
+        val sigBaseString = "v0:$timestamp:$requestBody"
+        val digestMessage = mac.doFinal(sigBaseString.toByteArray()).fold("") { str, it -> str + "%02x".format(it) }
+        val fullSignature = "v0=$digestMessage"
+
+        if (fullSignature != slackSignature) {
+            throw RequestNotVerifiedException()
+        }
     }
 }

@@ -6,9 +6,12 @@ import com.roihunter.facehunter.dto.slack.interactive.PayloadDto
 import com.roihunter.facehunter.flow.EvaluateGuessFlow
 import com.roihunter.facehunter.flow.NewGuessFlow
 import com.roihunter.facehunter.flow.SendHelpInfoFlow
+import com.roihunter.facehunter.manager.SlackManager
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -18,7 +21,8 @@ class InteractiveController(
         private val mapper: ObjectMapper,
         private val evaluateGuessFlow: EvaluateGuessFlow,
         private val newGuessFlow: NewGuessFlow,
-        private val sendHelpInfoFlow: SendHelpInfoFlow
+        private val sendHelpInfoFlow: SendHelpInfoFlow,
+        private val slackManager: SlackManager
 ) {
 
     @PostMapping(
@@ -28,8 +32,12 @@ class InteractiveController(
     )
     @ResponseStatus(HttpStatus.OK)
     fun slackInteractiveResponse(
-            @RequestParam payload: String
+            @RequestParam payload: String,
+            @RequestBody body: String,
+            @RequestHeader("X-Slack-Request-Timestamp") timestamp: String,
+            @RequestHeader("X-Slack-Signature") signature: String
     ) {
+        slackManager.verifyRequest(body, timestamp, signature)
         val payloadDto: PayloadDto = mapper.readValue(payload)
         val pickedAction = payloadDto.actions.first()
         when {
