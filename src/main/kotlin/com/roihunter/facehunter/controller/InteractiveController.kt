@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.roihunter.facehunter.dto.slack.interactive.PayloadDto
 import com.roihunter.facehunter.flow.EvaluateGuessFlow
 import com.roihunter.facehunter.flow.NewGuessFlow
+import com.roihunter.facehunter.flow.SendHelpInfoFlow
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 class InteractiveController(
         private val mapper: ObjectMapper,
         private val evaluateGuessFlow: EvaluateGuessFlow,
-        private val newGuessFlow: NewGuessFlow
+        private val newGuessFlow: NewGuessFlow,
+        private val sendHelpInfoFlow: SendHelpInfoFlow
 ) {
 
     @PostMapping(
@@ -30,14 +32,16 @@ class InteractiveController(
     ) {
         val payloadDto: PayloadDto = mapper.readValue(payload)
         val pickedAction = payloadDto.actions.first()
-        if (pickedAction.value != "next") { // Means we're evaluating a guess.
-            val splitParts = pickedAction.value?.split("..") ?: throw IllegalStateException("Missing clicked button value!")
-            val correct = splitParts[0]
-            val correctName = splitParts[1]
-            val position = splitParts[2]
-            evaluateGuessFlow.evaluateGuess(correct == "correct", correctName, position, payloadDto.user.id, payloadDto.team.id)
-        } else {
-            newGuessFlow.newGuess(payloadDto.user.id, payloadDto.team.id)
+        when {
+            pickedAction.value == "next" -> newGuessFlow.newGuess(payloadDto.user.id, payloadDto.team.id)
+            pickedAction.value == "help" -> sendHelpInfoFlow.sendHelpInfo(payloadDto.user.id, payloadDto.team.id)
+            else -> { // Means we're evaluating a guess.
+                val splitParts = pickedAction.value?.split("..") ?: throw IllegalStateException("Missing clicked button value!")
+                val correct = splitParts[0]
+                val correctName = splitParts[1]
+                val position = splitParts[2]
+                evaluateGuessFlow.evaluateGuess(correct == "correct", correctName, position, payloadDto.user.id, payloadDto.team.id)
+            }
         }
     }
 }
