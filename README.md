@@ -11,10 +11,14 @@ Use `/facehunt` slash command in any public channel. Facehunter will register th
 <h3>Limitations</h3>
 While the app works pretty well, if I do say so myself, there are a few limitations posed by Slack.
 
+<h6>Gender</h6>
 Unfortunately Slack doesn't tell males and females apart, which leads to female names being shown for male users and vice versa.
 
+<h6>Minimal amount of users</h6>
 The app requires at least 5 active users in your workspace to work, as it would make little sense otherwise.
 
+<h6>Photo required</h6>
 Only people who have uploaded their profile image can be shown. You wouldn't be able to guess them without their photos anyway.
 
+<h6>Single workspace</h6>
 The app is limited to only one Slack workspace. While we are aware there are some (particularly larger) companies that keep multiple Slack workspaces for different teams, Face Hunter (at least at this moment) doesn't support that.
