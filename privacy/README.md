@@ -1,4 +1,5 @@
 <h1>Privacy policy</h1>
+<h5>Face Hunter - powered by <a href="https://www.roihunter.com/join-us">ROI Hunter</a></h5>
 This file lists all data we store about the users of Face Hunter.
 
 <h3>Stored in database</h3>

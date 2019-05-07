@@ -1,5 +1,5 @@
 <h1>Face Hunter</h1>
-<h4>by ROI Hunter</h4>
+<h4>powered by <a href="https://www.roihunter.com/join-us">ROI Hunter</a></h4>
 This is an open-source Slack face guessing game. Let's be honest: it was written solely for the purpose of improving ROI Hunter brand awareness. It is based on a previous game that was developed by our Internal team in their spare time, but then got pretty popular.
 
 <h3>Installation</h3>
