@@ -4,11 +4,13 @@ This file lists all data we store about the users of Face Hunter.
 
 <h3>Stored in database</h3>
 We don't store any personal data. Our database records store only the following:
-- team name
-- team id
-- access token
-- bot id
-- bot token
+<ul>
+<li>team name</li>
+<li>team id</li>
+<li>access token</li>
+<li>bot id</li>
+<li>bot token</li>
+</ul>
 
 While none of these stored data are in any way personal, please be aware that we still adhere to the best security practices.
 
