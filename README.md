@@ -8,6 +8,9 @@ Simply install the app from Slack app directory.
 <h3>Running the app</h3>
 Use `/facehunt` slash command in any public channel. Facehunter will register this and will send a PM to you. Nothing else needed.
 
+<h3>How does it work?</h3>
+When a user requests another guess (either via `Guess another` button or via `/facehunt` command), the app calls `users.list` <a href="https://api.slack.com/methods/users.list">Slack method</a>. It parses the output (nothing is stored) and picks 1 user with photo and four other random names and builds the guessing buttons from them. Then it calls <a href="https://api.slack.com/methods/chat.postMessage">`chat.postMessage`</a> to display the guessing block to the user.
+
 <h3>Limitations</h3>
 While the app works pretty well, if I do say so myself, there are a few limitations posed by Slack.
 

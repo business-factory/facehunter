@@ -2,6 +2,9 @@
 <h5>Face Hunter - powered by <a href="https://www.roihunter.com/join-us">ROI Hunter</a></h5>
 This file lists all data we store about the users of Face Hunter.
 
+<h3>Personal data usage</h3>
+To put it simply: Facehunter doesn't store personal data of anybody. However, it does use names and photos of users in the workspace in order to display a guess.
+
 <h3>Stored in database</h3>
 We don't store any personal data. Our database records store only the following:
 <ul>
