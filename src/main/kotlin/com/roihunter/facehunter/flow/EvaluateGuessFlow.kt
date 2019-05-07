@@ -18,9 +18,9 @@ class EvaluateGuessFlow(
     fun evaluateGuess(correct: Boolean, correctName: String, position: String, userId: String, teamId: String) {
         val workspace = workspaceManager.getWorkspaceByTeamId(teamId)
         val message = if (correct) {
-            ":heavy_check_mark: Position: $position"
+            ":tada: Position: $position"
         } else {
-            ":negative_squared_cross_mark: It was $correctName. Position: $position"
+            ":x: It was $correctName. Position: $position"
         }
 
         val blocks = mutableListOf<StructuredBlock>()
