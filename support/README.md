@@ -10,3 +10,6 @@ Yep, we've been there too. First I just sent an email explaining the slash comma
 
 <h3>A person isn't shown, even though he/she has a custom photo</h3>
 This can happen with people who use Gravatar images. Afaik the only way to solve the issue is to ask them to upload the photo to Slack manually. The cause of the issue: when using Gravatar, Slack doesn't register it as a custom image, which is a prerequisite for the user being included in Face Hunter possible guesses.
+
+<h3>I need to contact you with a different issue</h3>
+Feel free to, I'll try to help you if possible. My contact mail is `josef.hertl@roihunter.com`
