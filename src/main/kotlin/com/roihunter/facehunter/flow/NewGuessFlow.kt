@@ -44,6 +44,7 @@ class NewGuessFlow(
 
         val buttons = mutableListOf(employeeToButton(correctGuess, correctGuess, "correct"))
         buttons.addAll(wrongGuesses.map { employeeToButton(it, correctGuess, "wrong") })
+        buttons.shuffle()
         blocks.add(ActionsBlockDto(elements = buttons))
 
         slackManager.postSlackMessage(userId, workspace.botToken, blocks)
