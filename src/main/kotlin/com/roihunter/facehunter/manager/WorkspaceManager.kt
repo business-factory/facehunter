@@ -17,7 +17,12 @@ class WorkspaceManager(
     }
 
     fun storeWorkspace(workspace: Workspace) {
-        workspaceRepository.save(workspace)
+        val existingWorkspaceOptional = workspaceRepository.getByTeamId(workspace.teamId)
+        if (existingWorkspaceOptional.isPresent) {
+            return // We don't want to double-register the same workspace.
+        } else {
+            workspaceRepository.save(workspace)
+        }
     }
 
     fun getWorkspaceByTeamId(teamId: String): Workspace {
