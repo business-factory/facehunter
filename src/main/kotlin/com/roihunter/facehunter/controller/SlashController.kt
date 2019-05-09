@@ -1,6 +1,7 @@
 package com.roihunter.facehunter.controller
 
 import com.roihunter.facehunter.flow.NewGuessFlow
+import com.roihunter.facehunter.flow.SendEphemeralReployFlow
 import com.roihunter.facehunter.manager.SlackManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class SlashController(
         private val newGuessFlow: NewGuessFlow,
-        private val slackManager: SlackManager
+        private val slackManager: SlackManager,
+        private val sendEphemeralReployFlow: SendEphemeralReployFlow
 ) {
 
     @PostMapping(
@@ -39,6 +41,7 @@ class SlashController(
             GlobalScope.launch {
                 newGuessFlow.newGuess(user_id, team_id)
             }
+            sendEphemeralReployFlow.sendEphemeral(user_id, channel_id, team_id, "Face Hunter is preparing first guess for you!")
         }
     }
 }

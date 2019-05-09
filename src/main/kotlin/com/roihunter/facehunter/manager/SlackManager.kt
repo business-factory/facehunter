@@ -38,6 +38,21 @@ class SlackManager(
     }
 
     /**
+     * Posts an ephemeral message (only visible to the user to the given channel. Shouldn't use bot token, but rather app token.
+     */
+    fun postEphemeralMessage(userId: String, channelId: String, token: String, text: String) {
+        post(
+                url = "https://slack.com/api/chat.postEphemeral",
+                params = mutableMapOf(
+                        "channel" to channelId,
+                        "text" to text,
+                        "token" to token,
+                        "user" to userId
+                )
+        )
+    }
+
+    /**
      * Retrieves all users in given Slack workspace.
      */
     fun getAllUsersInWorkspace(botToken: String): List<UserDto> {
