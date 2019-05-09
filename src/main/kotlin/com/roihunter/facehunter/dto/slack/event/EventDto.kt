@@ -7,10 +7,8 @@ data class EventDto(
         val challenge: String?,
         @JsonProperty("type")
         val type: String?,
-        @JsonProperty("user")
-        val user: String?,
-        @JsonProperty("text")
-        val text: String?,
         @JsonProperty("team")
-        val team: String?
+        val team: String?,
+        @JsonProperty("event")
+        val details: EventDetailsDto?
 )

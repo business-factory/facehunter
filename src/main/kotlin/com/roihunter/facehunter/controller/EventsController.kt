@@ -31,8 +31,8 @@ class EventsController(
         val event: EventDto = mapper.readValue(body)
         if (event.type == "url_verification") {
             return ChallengeResponseDto(event.challenge ?: throw IllegalStateException("Challenge request without challenge value. $event"))
-        } else if (event.type == "event_callback" && event.text?.contains("help", ignoreCase = true) == true && event.user != null && event.team != null) {
-            sendHelpInfoFlow.sendHelpInfo(event.user, event.team)
+        } else if (event.type == "event_callback" && event.details?.text?.contains("help", ignoreCase = true) == true && event.details.user != null && event.team != null) {
+            sendHelpInfoFlow.sendHelpInfo(event.details.user, event.team)
             return null
         } else {
             return null
