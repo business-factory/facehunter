@@ -5,7 +5,7 @@ import com.roihunter.facehunter.manager.WorkspaceManager
 import org.springframework.stereotype.Service
 
 @Service
-class SendEphemeralReployFlow(
+class SendEphemeralReplyFlow(
         private val workspaceManager: WorkspaceManager,
         private val slackManager: SlackManager
 ) {
