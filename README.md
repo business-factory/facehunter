@@ -1,6 +1,6 @@
 <h1>Face Hunter</h1>
 <h4>powered by <a href="https://www.roihunter.com/join-us">ROI Hunter</a></h4>
-This is an open-source Slack face guessing game. It is based on a previous game that was developed by our Internal team in our spare time, but then got pretty popular. We have a few company values, among which are <i>joy</i> and <i>openess</i>, so it feels quite natural to release the app as open-source, so that everyone can have fun.
+This is an open-source Slack face guessing game. It is based on a previous game that was developed by our Internal team in our spare time, but then got pretty popular. We have a few company values, among which are <i>joy</i> and <i>openness</i>, so it feels quite natural to release the app as open-source, so that everyone can have fun.
 
 <h3>Installation</h3>
 Simply install the app from Slack app directory.
