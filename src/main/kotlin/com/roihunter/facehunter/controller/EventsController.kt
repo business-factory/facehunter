@@ -34,6 +34,9 @@ class EventsController(
         } else if (event.type == "event_callback" && event.details?.text?.contains("help", ignoreCase = true) == true && event.details.user != null && event.teamId != null) {
             sendHelpInfoFlow.sendHelpInfo(event.details.user, event.teamId)
             return null
+        } else if (event.type == "event_callback" && event.details?.type?.equals("app_home_opened", ignoreCase = true) == true && event.details.user != null && event.teamId != null) {
+            sendHelpInfoFlow.sendHelpInfo(event.details.user, event.teamId)
+            return null
         } else {
             return null
         }

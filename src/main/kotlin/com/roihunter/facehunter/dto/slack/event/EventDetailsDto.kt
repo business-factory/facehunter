@@ -6,5 +6,7 @@ data class EventDetailsDto(
         @JsonProperty("text")
         val text: String?,
         @JsonProperty("user")
-        val user: String?
+        val user: String?,
+        @JsonProperty("type")
+        val type: String?
 )
