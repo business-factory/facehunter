@@ -19,6 +19,7 @@ open class HibernateConfiguration {
         dataSource.jdbcUrl = dbUrl
         dataSource.username = dbUserName
         dataSource.password = dbPassword
+        dataSource.maximumPoolSize = 5
         return dataSource
     }
 }
