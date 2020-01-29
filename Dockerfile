@@ -1,4 +1,4 @@
-FROM eu.gcr.io/stage-193519/roihunter/java-base:11
+FROM eu.gcr.io/stage-193519/roihunter/openjdk-base-11
 ADD target/facehunter.jar facehunter.jar
 
 EXPOSE 8080
